@@ -1,0 +1,16 @@
+{
+  "name": "leapp-node-ipc-shim",
+  "private": true,
+  "version": "0.1.0",
+  "description": "WSL node-ipc shim for forwarding Leapp CLI traffic to the Go TCP bridge",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@node-ipc/node-ipc": "^11.0.3"
+  }
+}

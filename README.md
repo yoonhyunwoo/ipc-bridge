@@ -22,6 +22,20 @@ Expose a Unix socket and forward it to a TCP bridge:
 ipc-bridge --from=unix:///tmp/leapp_da.sock --to=tcp://127.0.0.1:43827
 ```
 
+Expose a local `node-ipc` server for `leapp-cli` inside WSL and forward it to the TCP bridge:
+
+```bash
+cd shim
+npm install
+npm start
+```
+
+The expected runtime chain for Leapp on WSL is:
+
+```text
+leapp-cli -> node-ipc shim -> tcp://127.0.0.1:43827 -> ipc-bridge -> npipe:////./pipe/leapp_da
+```
+
 ## Build
 
 ```bash
