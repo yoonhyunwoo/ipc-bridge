@@ -23,4 +23,4 @@ The expected runtime order is:
 3. This shim inside WSL
 4. `leapp-cli` inside WSL
 
-For persistent startup with Windows Task Scheduler and a WSL `systemd` service, see [`../ops/README.md`](../ops/README.md).
+For persistent startup with Windows Task Scheduler and a WSL `systemd` service, see [`../ops/README.md`](../ops/README.md). If `/usr/bin/node` is not Node 22+, install with `NODE_BIN="$(readlink -f "$(command -v node)")"` when running the WSL installer.
