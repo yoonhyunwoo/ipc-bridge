@@ -36,6 +36,8 @@ The expected runtime chain for Leapp on WSL is:
 leapp-cli -> node-ipc shim -> tcp://127.0.0.1:43827 -> ipc-bridge -> npipe:////./pipe/leapp_da
 ```
 
+To keep both sides running across reboots, use the installation assets in [`ops/README.md`](ops/README.md).
+
 ## Build
 
 ```bash

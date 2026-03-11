@@ -22,3 +22,5 @@ The expected runtime order is:
 2. `ipc-bridge` exposing the Windows named pipe on TCP
 3. This shim inside WSL
 4. `leapp-cli` inside WSL
+
+For persistent startup with Windows Task Scheduler and a WSL `systemd` service, see [`../ops/README.md`](../ops/README.md).
