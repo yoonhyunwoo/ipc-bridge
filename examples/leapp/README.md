@@ -1,6 +1,18 @@
-# Persistent Leapp WSL Bridge Setup
+# Leapp Integration Example
 
-These scripts install the Leapp WSL shim as a `systemd` service and register Windows startup tasks for `ipc-bridge`.
+This example shows how to connect Leapp on Windows and WSL through `ipc-bridge`.
+
+The runtime chain is:
+
+```text
+leapp-cli -> node-ipc shim -> tcp://127.0.0.1:43827 -> ipc-bridge -> npipe:////./pipe/leapp_da
+```
+
+## Layout
+
+- Node shim: `examples/leapp/shim/`
+- WSL installer: `examples/leapp/ops/install-wsl-shim.sh`
+- Windows startup scripts: `examples/leapp/ops/register-ipc-bridge-tasks.ps1` and `examples/leapp/ops/start-ipc-bridge.ps1`
 
 ## Requirements
 
@@ -10,8 +22,11 @@ These scripts install the Leapp WSL shim as a `systemd` service and register Win
 - `git`, `npm`, and `systemctl` available inside WSL
 - `ipc-bridge.exe` copied to `C:\ProgramData\LeappIpcBridge\ipc-bridge.exe`
 
-## Recommended paths
+## Shared Defaults
 
+- Node IPC server id: `leapp_da`
+- TCP bridge endpoint: `tcp://127.0.0.1:43827`
+- Windows named pipe target: `npipe:////./pipe/leapp_da`
 - Windows bridge binary: `C:\ProgramData\LeappIpcBridge\ipc-bridge.exe`
 - Windows copied wrapper: `C:\ProgramData\LeappIpcBridge\start-ipc-bridge.ps1`
 - Windows logs: `C:\ProgramData\LeappIpcBridge\logs\`
@@ -19,18 +34,35 @@ These scripts install the Leapp WSL shim as a `systemd` service and register Win
 - WSL env file: `/etc/default/leapp-ipc-shim`
 - WSL service unit: `/etc/systemd/system/leapp-ipc-shim.service`
 
-## Install the WSL shim service
+## Run the Shim Manually
 
-From the `ipc-bridge` repository inside WSL:
+From the repository root inside WSL:
 
 ```bash
-sudo bash ops/install-wsl-shim.sh
+cd examples/leapp/shim
+npm install
+npm start
+```
+
+Environment defaults used by the shim:
+
+- `LEAPP_SHIM_SERVER_ID=leapp_da`
+- `LEAPP_SHIM_TCP_HOST=127.0.0.1`
+- `LEAPP_SHIM_TCP_PORT=43827`
+- `LEAPP_SHIM_LOG_LEVEL=info`
+
+## Install the WSL Shim Service
+
+From the repository root inside WSL:
+
+```bash
+sudo bash examples/leapp/ops/install-wsl-shim.sh
 ```
 
 If your default `node` is version 22 but `/usr/bin/node` is older, pass the Node 22 binary explicitly:
 
 ```bash
-sudo NODE_BIN="$(readlink -f "$(command -v node)")" bash ops/install-wsl-shim.sh
+sudo NODE_BIN="$(readlink -f "$(command -v node)")" bash examples/leapp/ops/install-wsl-shim.sh
 ```
 
 The installer will:
@@ -44,22 +76,22 @@ The installer will:
 You can override defaults with environment variables before running the installer:
 
 ```bash
-sudo LEAPP_SHIM_TCP_PORT=43827 LEAPP_SHIM_LOG_LEVEL=debug bash ops/install-wsl-shim.sh
+sudo LEAPP_SHIM_TCP_PORT=43827 LEAPP_SHIM_LOG_LEVEL=debug bash examples/leapp/ops/install-wsl-shim.sh
 ```
 
-## Register the Windows startup tasks
+## Register the Windows Startup Tasks
 
-Open an elevated PowerShell prompt in the `ipc-bridge` repository and run:
+Open an elevated PowerShell prompt in the repository root and run:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
-.\ops\register-ipc-bridge-tasks.ps1 -BridgeExePath "C:\ProgramData\LeappIpcBridge\ipc-bridge.exe"
+.\examples\leapp\ops\register-ipc-bridge-tasks.ps1 -BridgeExePath "C:\ProgramData\LeappIpcBridge\ipc-bridge.exe"
 ```
 
 If you want to target a specific WSL distro instead of the default one:
 
 ```powershell
-.\ops\register-ipc-bridge-tasks.ps1 -BridgeExePath "C:\ProgramData\LeappIpcBridge\ipc-bridge.exe" -WslDistro "Ubuntu-24.04"
+.\examples\leapp\ops\register-ipc-bridge-tasks.ps1 -BridgeExePath "C:\ProgramData\LeappIpcBridge\ipc-bridge.exe" -WslDistro "Ubuntu-24.04"
 ```
 
 The script will:
@@ -70,7 +102,7 @@ The script will:
 
 The PowerShell session must be running as Administrator, otherwise `Register-ScheduledTask` will fail with `0x80070005` access denied.
 
-## Verify the setup
+## Verify the Setup
 
 In WSL:
 

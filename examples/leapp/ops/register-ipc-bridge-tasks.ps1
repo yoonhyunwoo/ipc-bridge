@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$BridgeExePath = "C:\Program Files\LeappIpcBridge\ipc-bridge.exe",
+    [string]$BridgeExePath = "C:\ProgramData\LeappIpcBridge\ipc-bridge.exe",
     [string]$WrapperTargetPath = "C:\ProgramData\LeappIpcBridge\start-ipc-bridge.ps1",
     [string]$ListenEndpoint = "tcp://127.0.0.1:43827",
     [string]$TargetEndpoint = "npipe:////./pipe/leapp_da",

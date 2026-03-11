@@ -5,7 +5,7 @@ set -euo pipefail
 readonly REPO_URL="${REPO_URL:-https://github.com/yoonhyunwoo/ipc-bridge.git}"
 readonly INSTALL_ROOT="${INSTALL_ROOT:-/opt/leapp-ipc-bridge}"
 readonly REPO_DIR="${REPO_DIR:-$INSTALL_ROOT/repo}"
-readonly SHIM_DIR="${SHIM_DIR:-$REPO_DIR/shim}"
+readonly SHIM_DIR="${SHIM_DIR:-$REPO_DIR/examples/leapp/shim}"
 readonly ENV_FILE="${ENV_FILE:-/etc/default/leapp-ipc-shim}"
 readonly SERVICE_PATH="${SERVICE_PATH:-/etc/systemd/system/leapp-ipc-shim.service}"
 readonly NODE_BIN="${NODE_BIN:-/usr/bin/node}"

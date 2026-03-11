@@ -8,38 +8,36 @@
 - `unix:///absolute/path.sock`
 - `npipe:////./pipe/name` on Windows
 
-## Example
+## Examples
 
 Expose a Windows named pipe on localhost:
 
 ```bash
-ipc-bridge --from=tcp://127.0.0.1:43827 --to=npipe:////./pipe/leapp_da
+ipc-bridge --from=tcp://127.0.0.1:43827 --to=npipe:////./pipe/my_app
 ```
 
 Expose a Unix socket and forward it to a TCP bridge:
 
 ```bash
-ipc-bridge --from=unix:///tmp/leapp_da.sock --to=tcp://127.0.0.1:43827
+ipc-bridge --from=unix:///tmp/my-app.sock --to=tcp://127.0.0.1:43827
 ```
 
-Expose a local `node-ipc` server for `leapp-cli` inside WSL and forward it to the TCP bridge:
+Expose a TCP socket and forward it to a Unix socket:
 
 ```bash
-cd shim
-npm install
-npm start
+ipc-bridge --from=tcp://127.0.0.1:9000 --to=unix:///tmp/my-app.sock
 ```
 
-The expected runtime chain for Leapp on WSL is:
-
-```text
-leapp-cli -> node-ipc shim -> tcp://127.0.0.1:43827 -> ipc-bridge -> npipe:////./pipe/leapp_da
-```
-
-To keep both sides running across reboots, use the installation assets in [`ops/README.md`](ops/README.md). The recommended Windows binary path is `C:\ProgramData\LeappIpcBridge\ipc-bridge.exe`.
+For a runnable Leapp integration example with the Node shim and Windows/WSL startup automation, see [`examples/leapp/README.md`](examples/leapp/README.md).
 
 ## Build
 
 ```bash
 go build ./cmd/ipc-bridge
+```
+
+## Test
+
+```bash
+go test ./...
 ```
